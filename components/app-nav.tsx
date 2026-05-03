@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bot, CalendarDays, LayoutDashboard, MapPinned, Moon, Search, ShieldCheck, Sun, UsersRound, Vote } from "lucide-react";
+import { Bot, CalendarDays, LayoutDashboard, LogIn, MapPinned, Moon, Search, ShieldCheck, Sun, UsersRound, Vote } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -13,7 +13,8 @@ const nav = [
   { href: "/eligibility", label: "Eligibility", icon: ShieldCheck },
   { href: "/polling-booths", label: "Booths", icon: MapPinned },
   { href: "/candidates", label: "Candidates", icon: UsersRound },
-  { href: "/admin", label: "Admin", icon: LayoutDashboard }
+  { href: "/admin", label: "Admin", icon: LayoutDashboard },
+  { href: "/login", label: "Login", icon: LogIn }
 ];
 
 export function AppNav() {

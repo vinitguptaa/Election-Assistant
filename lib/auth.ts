@@ -4,6 +4,8 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "./prisma";
 
+const useMocks = process.env.NEXT_PUBLIC_ENABLE_MOCKS !== "false";
+
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
@@ -16,6 +18,16 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email) return null;
+        if (credentials.password && credentials.password.length < 8) return null;
+
+        if (useMocks) {
+          return {
+            id: "demo-user",
+            email: credentials.email,
+            name: credentials.email.split("@")[0],
+            role: "ADMIN"
+          };
+        }
 
         const user = await prisma.user.upsert({
           where: { email: credentials.email },
@@ -26,7 +38,6 @@ export const authOptions: NextAuthOptions = {
           }
         });
 
-        if (credentials.password && credentials.password.length < 8) return null;
         await bcrypt.hash(credentials.password ?? "development-password", 10);
         return { id: user.id, email: user.email, name: user.name, role: user.role };
       }
@@ -47,6 +58,6 @@ export const authOptions: NextAuthOptions = {
     }
   },
   pages: {
-    signIn: "/assistant"
+    signIn: "/login"
   }
 };
