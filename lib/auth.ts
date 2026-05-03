@@ -8,6 +8,7 @@ const useMocks = process.env.NEXT_PUBLIC_ENABLE_MOCKS !== "false";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
+  secret: process.env.NEXTAUTH_SECRET ?? "development-secret-change-me",
   session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({

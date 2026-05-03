@@ -1,10 +1,12 @@
 "use client";
 
+import type { FormEvent } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Bot, CalendarDays, LayoutDashboard, LogIn, MapPinned, Moon, Search, ShieldCheck, Sun, UsersRound, Vote } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -19,11 +21,21 @@ const nav = [
 
 export function AppNav() {
   const pathname = usePathname();
+  const router = useRouter();
   const [dark, setDark] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
   }, [dark]);
+
+  function handleSearch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const query = searchQuery.trim();
+    router.push(query ? `/search?q=${encodeURIComponent(query)}` : "/search");
+    setSearchOpen(false);
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
@@ -53,9 +65,25 @@ export function AppNav() {
           })}
         </nav>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" aria-label="Search">
-            <Search className="h-4 w-4" />
-          </Button>
+          {searchOpen ? (
+            <form onSubmit={handleSearch} className="flex items-center gap-2">
+              <Input
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                autoFocus
+                placeholder="Search"
+                aria-label="Search CivicPulse"
+                className="h-10 w-40 sm:w-56"
+              />
+              <Button type="submit" variant="outline" size="icon" aria-label="Submit search">
+                <Search className="h-4 w-4" />
+              </Button>
+            </form>
+          ) : (
+            <Button variant="outline" size="icon" onClick={() => setSearchOpen(true)} aria-label="Search">
+              <Search className="h-4 w-4" />
+            </Button>
+          )}
           <Button variant="outline" size="icon" onClick={() => setDark((value) => !value)} aria-label="Toggle dark mode">
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>
