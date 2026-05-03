@@ -4,9 +4,13 @@ Production-ready AI-powered election assistant built with Next.js 15, TypeScript
 
 Live demo: https://election-assistant-twnh.onrender.com
 
+This project was built with the help of prompt engineering workflows, using structured prompts to plan features, shape AI assistant behavior, improve UX flows, and keep responses neutral, clear, and useful for civic information.
+
 ## Features
 
+- Login-first experience with sign in/sign up support before accessing core app functionality.
 - AI election chatbot with intent detection, multilingual-ready prompts, voice input, text-to-speech, supporting cards, and chat history persistence.
+- Site search across candidates, parties, booths, election timelines, news, FAQs, and app features.
 - Interactive election timeline with regional filtering and countdowns.
 - Voter eligibility checker with dynamic missing requirements and next steps.
 - Polling booth finder with OpenStreetMap route links and mock queue estimates.
@@ -23,7 +27,7 @@ Live demo: https://election-assistant-twnh.onrender.com
 - Database: PostgreSQL with Prisma ORM
 - Auth: NextAuth credentials provider with Prisma adapter
 - AI: OpenAI API, with safe mock fallback when no key is provided
-- Deployment: Vercel frontend/API, Supabase or Railway PostgreSQL
+- Deployment: Docker-ready Render service, with optional PostgreSQL persistence
 
 ## Quick Start
 
@@ -39,7 +43,14 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-By default, `NEXT_PUBLIC_ENABLE_MOCKS=true` lets the app run without a database for UI development. Set it to `false` in production to persist API data in PostgreSQL.
+By default, `NEXT_PUBLIC_ENABLE_MOCKS=true` lets the app run without a database for UI development. The login page includes demo-friendly credentials in mock mode. Set mocks to `false` in production to persist users, chat history, and API data in PostgreSQL.
+
+## Prompt Engineering Focus
+
+- Structured prompts guide the assistant toward neutral, source-aware election explanations.
+- The chatbot flow separates intent detection, safety checks, and user-facing responses.
+- Prompting was used during development to refine app flows such as login-first access, search behavior, eligibility guidance, and civic information presentation.
+- The project emphasizes responsible AI behavior for a sensitive domain: clarity, neutrality, and verification reminders.
 
 ## Environment
 
@@ -87,25 +98,22 @@ Core endpoints:
 
 ## Deployment
 
-### Vercel + Supabase
+### Render
 
-1. Create a Supabase PostgreSQL database.
-2. Add environment variables in Vercel.
-3. Set `NEXT_PUBLIC_ENABLE_MOCKS=false`.
-4. Deploy from the `election-assistant` directory.
-5. Run migrations:
+1. Connect the GitHub repository to Render.
+2. Choose Docker deployment.
+3. Add environment variables in the Render dashboard.
+4. Deploy the latest commit.
+5. For persistent production data, add a PostgreSQL database and run:
 
 ```bash
 npm run db:deploy
 npm run db:seed
 ```
 
-### Railway
+### Other Platforms
 
-1. Create a PostgreSQL service.
-2. Add the generated `DATABASE_URL`.
-3. Use the Dockerfile or Node build command `npm run build`.
-4. Start with `npm start`.
+The app can also run on platforms that support Next.js and Node.js. Use `npm run build` and `npm start`, or deploy with the included Dockerfile.
 
 ## Docker
 
