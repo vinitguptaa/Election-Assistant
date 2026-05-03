@@ -7,25 +7,27 @@ import { prisma } from "./prisma";
 const useMocks = process.env.NEXT_PUBLIC_ENABLE_MOCKS !== "false";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  adapter: useMocks ? undefined : PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET ?? "development-secret-change-me",
   session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({
       name: "Email",
       credentials: {
+        name: { label: "Name", type: "text" },
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
         if (!credentials?.email) return null;
         if (credentials.password && credentials.password.length < 8) return null;
+        const displayName = credentials.name || credentials.email.split("@")[0];
 
         if (useMocks) {
           return {
             id: "demo-user",
             email: credentials.email,
-            name: credentials.email.split("@")[0],
+            name: displayName,
             role: "ADMIN"
           };
         }
@@ -35,7 +37,7 @@ export const authOptions: NextAuthOptions = {
           update: {},
           create: {
             email: credentials.email,
-            name: credentials.email.split("@")[0]
+            name: displayName
           }
         });
 

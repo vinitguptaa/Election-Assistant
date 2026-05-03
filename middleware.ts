@@ -10,14 +10,25 @@ function addSecurityHeaders(response: NextResponse) {
 }
 
 export async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname.startsWith("/admin")) {
-    const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET ?? "development-secret-change-me" });
+  const pathname = request.nextUrl.pathname;
+  const publicPath =
+    pathname === "/login" ||
+    pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/_next") ||
+    pathname === "/favicon.ico" ||
+    pathname === "/robots.txt" ||
+    pathname === "/sitemap.xml";
 
-    if (!token) {
-      const loginUrl = new URL("/login", request.url);
-      loginUrl.searchParams.set("callbackUrl", request.nextUrl.pathname);
-      return addSecurityHeaders(NextResponse.redirect(loginUrl));
-    }
+  if (publicPath) {
+    return addSecurityHeaders(NextResponse.next());
+  }
+
+  const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET ?? "development-secret-change-me" });
+
+  if (!token) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("callbackUrl", `${request.nextUrl.pathname}${request.nextUrl.search}`);
+    return addSecurityHeaders(NextResponse.redirect(loginUrl));
   }
 
   return addSecurityHeaders(NextResponse.next());
