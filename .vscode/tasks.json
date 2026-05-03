@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install dependencies",
+      "type": "shell",
+      "command": ".\\scripts\\install.cmd",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run dev server",
+      "type": "shell",
+      "command": ".\\scripts\\dev.cmd",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Prisma generate",
+      "type": "shell",
+      "command": ".\\scripts\\prisma-generate.cmd",
+      "problemMatcher": []
+    },
+    {
+      "label": "Seed database",
+      "type": "shell",
+      "command": "$env:Path='C:\\Program Files\\nodejs;' + $env:Path; & 'C:\\Program Files\\nodejs\\npm.cmd' run db:seed",
+      "problemMatcher": []
+    }
+  ]
+}

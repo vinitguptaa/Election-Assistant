@@ -1,0 +1,15 @@
+
+> election-assistant@1.0.0 dev
+> next dev
+
+   ▲ Next.js 15.1.3
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.56.1:3000
+
+ ✓ Starting...
+ ✓ Ready in 2.7s
+ ✓ Compiled /middleware in 213ms (98 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 2.2s (1393 modules)
+ GET / 200 in 2971ms
+[?25h
