@@ -2,6 +2,8 @@
 
 Production-ready AI-powered election assistant built with Next.js 15, TypeScript, Tailwind CSS, shadcn-style UI primitives, Prisma, PostgreSQL, NextAuth, OpenAI, Recharts, and Framer Motion.
 
+Live demo: https://election-assistant-twnh.onrender.com
+
 ## Features
 
 - AI election chatbot with intent detection, multilingual-ready prompts, voice input, text-to-speech, supporting cards, and chat history persistence.
